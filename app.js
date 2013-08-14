@@ -19,6 +19,8 @@
 			var $row = $(this),
 				obj  = {};
 						
+			if ( $row.find('td').length !== 6 ) return;
+			
 			obj['stopsUrl'] = '' + $row.closest('a').attr('href');
 			
 			
@@ -47,7 +49,7 @@
 				var text  = $.trim( $(this).find('p').text() ),
 					parts = $.map( text.split(/\bat\b/), function (val) { return $.trim( val ); } );
 					
-				stops.push({ location: parts[0], time: parts[1] });
+				stops.push({ location: parts[0], arrival: parts[1] });
 			});
 			
 			obj['stops'] = stops;
@@ -58,7 +60,30 @@
 	};
 	
 	_display = function () {
-		console.log( data );
+		
+		var tmpl = Handlebars.compile( $('#trains-tmpl').html() );
+
+		$('#trains')
+			.find('tbody')
+			.empty()
+			.append( tmpl( {trains: data} ) )
+			.find('tr')
+				.each( function (index) {
+					$.data( this, 'stops', data[index]['stops'] );
+				});
+		
+		$('#trains').on('click', 'tr', _onClickTrainRow);
+		
+	};
+	
+	_onClickTrainRow = function (evt) {
+		var thisRow = this,
+			tmpl    = Handlebars.compile( $('#stops-tmpl').html() );
+				
+		$('#stops')
+			.find('tbody')
+			.empty()
+			.append( tmpl( {stops: $.data( thisRow, 'stops')} ) );
 	};
 
 	_getData('http://dv.njtransit.com/mobile/tid-mobile.aspx?sid=NP').then( _processTrainData ).then( _display );

@@ -1,16 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<title>DepartureInsight</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css" rel="stylesheet">
 </head>
 <body>
 
-<div id="trains">
+<div class="container">
+
+	<div class="row">
+	
+		<div class="col-xs-12 col-sm-8 col-md-8">	
+			<table id="trains" class="table table-striped table-bordered table-hover">
+				<caption>Trains</caption>
+				<thead>
+					<tr>
+						<th>Depart</th>
+						<th>To</th>
+						<th>Track</th>
+						<th>Line</th>
+						<th>Train</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="col-xs-6 col-sm-4 col-md-4">
+			<table id="stops" class="table table-bordered">
+				<caption>Stops</caption>
+				<thead>
+					<tr>
+						<th>Stop</th>
+						<th>Estimated Arrival</th>
+					</tr>
+				<tbody>
+		
+				</tbody>
+			</table>
+		</div>
+		
+	</div>
 
 </div>
 
 
+
+<script id="trains-tmpl" type="text/x-handlebars-template">
+{{#each trains}} 
+	<tr>
+		<td>{{depart}}</td>
+		<td>{{to}}</td>
+		<td>{{track}}</td>
+		<td>{{line}}</td>
+		<td>{{train}}</td>
+		<td>{{status}}</td>
+	</tr>
+{{/each}}
+</script>
+
+<script id="stops-tmpl" type="text/x-handlebars-template">
+{{#each stops}} 
+	<tr>
+		<td>{{location}}</td>
+		<td>{{arrival}}</td>
+	</tr>
+{{/each}}
+</script>
+
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/js/bootstrap.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
