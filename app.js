@@ -1,4 +1,4 @@
-;(function ($, undefined) {
+;var app = (function ($, undefined) {
 
 	var $grid = $('#GridView1'),
 		data  = [];
@@ -105,8 +105,10 @@
 				
 		return subset;
 	};
-
-	_getData('http://dv.njtransit.com/mobile/tid-mobile.aspx?sid=NP').then( _processTrainData ).then( _display );
+	
+	init = function () {
+		_getData('http://dv.njtransit.com/mobile/tid-mobile.aspx?sid=NP').then( _processTrainData ).then( _display );
+	};
 
 
 })( window.jQuery );
