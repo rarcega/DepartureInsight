@@ -109,6 +109,10 @@
 	init = function () {
 		_getData('http://dv.njtransit.com/mobile/tid-mobile.aspx?sid=NP').then( _processTrainData ).then( _display );
 	};
+	
+	return {
+		init: init
+	};
 
 
 })( window.jQuery );
