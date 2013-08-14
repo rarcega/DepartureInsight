@@ -19,16 +19,17 @@
 			var $row = $(this),
 				obj  = {};
 						
-			if ( $row.find('td').length !== 6 ) return;
+			if ( index == 0 || $row.find('td').length !== 6 ) return;
 			
 			obj['stopsUrl'] = '' + $row.closest('a').attr('href');
-			
-			
+
 			$row.find('td').each( function (index, element) {
 				obj[ cols[index] ] = $.trim( $(element).text() );
 			});
 			
 			obj['stopsUrl'] = 'http://dv.njtransit.com/mobile/train_stops.aspx?sid=NP&train=' + obj['train'];
+			
+			data.push( obj );
 			
 			deferred.push( _getData( obj['stopsUrl'] ).then( _processStopsData( obj, data ) ) );
 		});		
@@ -53,13 +54,14 @@
 			});
 			
 			obj['stops'] = stops;
-			data.push( obj );
 			
 			return defer.resolve();
 		};
 	};
 	
 	_display = function () {
+	
+		var data = _filter();
 		
 		var tmpl = Handlebars.compile( $('#trains-tmpl').html() );
 
@@ -76,7 +78,7 @@
 		
 	};
 	
-	_onClickTrainRow = function (evt) {
+	_onClickTrainRow = function (evt) {		
 		var thisRow = this,
 			tmpl    = Handlebars.compile( $('#stops-tmpl').html() );
 				
@@ -84,6 +86,24 @@
 			.find('tbody')
 			.empty()
 			.append( tmpl( {stops: $.data( thisRow, 'stops')} ) );
+	};
+	
+	_filter = function () {
+	
+		var subset = [];
+		
+		$.each( data, function (index, train) {
+		
+			$.each( train['stops'], function ( index, stop ) {
+				if ( train['line'] === 'Northeast Corrdr' && stop['location'].toLowerCase().indexOf('metropark') != -1 ) {
+					subset.push( train );
+					return false;
+				}
+			});
+			
+		});
+				
+		return subset;
 	};
 
 	_getData('http://dv.njtransit.com/mobile/tid-mobile.aspx?sid=NP').then( _processTrainData ).then( _display );
